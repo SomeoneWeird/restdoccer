@@ -1,0 +1,220 @@
+<%
+	
+	var replacer = function(match, pIndent, pKey, pVal, pEnd) {
+      var key = '<span class=json-key>';
+      var val = '<span class=json-value>';
+      var str = '<span class=json-string>';
+      var r = pIndent || '';
+      if (pKey)
+         r = r + key + pKey.replace(/[": ]/g, '') + '</span>: ';
+      if (pVal)
+         r = r + (pVal[0] == '"' ? str : val) + pVal + '</span>';
+      return r + (pEnd || '');
+    }
+    var prettyPrint = function(obj) {
+      var jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg;
+      return JSON.stringify(obj, null, 3)
+         .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
+         .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+         .replace(jsonLine, replacer);
+    }
+
+%>
+
+<html>
+
+	<head></head>
+
+	<body>
+
+		<div id="header">
+
+			<h1><%= name %></h1>
+
+		</div>
+
+		<div class="accordion" id="endpoints">
+
+			<div class="accordion-group">
+
+				<% for(var i = 0; i < endpoints.length; i++) { %>
+			
+                
+                  	<div class="accordion-heading">
+	                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse-<%=i%>">
+	                      	<% 
+
+                      			var method = endpoints[i].method; 
+
+                				var badge = 'label-default';
+
+                      			if(method == "GET") {
+
+                      				badge = 'label-success';
+
+                      			} else if(method == "POST") {
+
+                      				badge = 'label-info';
+
+                      			}
+
+	                      	%>
+
+	                      	<span class="label <%= badge %>"><%= method %></span>
+
+	                      	<%= endpoints[i].endpoint %>
+	                    </a>
+                  	</div>
+
+                  	<div id="collapse-<%=i%>" class="accordion-body collapse">
+                    	<div class="accordion-inner">
+
+                    		<div class="page-header">
+							  <h1><%= endpoints[i].endpoint %> <br>
+							  <small><%= endpoints[i].description || '' %></small></h1>
+							</div>
+
+							<% if(endpoints[i].deprecated) { %>
+
+								<div class="alert">
+								  <button type="button" class="close" data-dismiss="alert">&times;</button>
+								  <strong>Warning!</strong> This endpoint has been deprecated.
+								</div>
+
+							<% } %>
+
+							<% if(endpoints[i].experimental) { %>
+
+								<div class="alert alert-info">
+									This API is experimental and will probably change.
+								</div>
+
+							<% } %>
+
+                    		<div style="width: 20%; float: left;">
+
+	                    		<h5>Method</h5>
+
+	                    		<%=method%>
+
+	                    	</div>
+
+	                    	<div style="width: 80%; float: right;">
+
+	                    		<% 
+
+	                    			var urlParameters = endpoints[i].urlParameters;
+
+	                    			if(urlParameters && Object.keys(urlParameters).length > 0) { %>
+
+	                    			<h5>Required URL Parameters</h5>
+
+										<table class="table table-striped">
+											<thead>
+												<tr>
+												<th>Key</th>
+												<th>Type</th>
+												<th>Required</th>
+												<th>Description</th>
+												</tr>
+											</thead>
+											<tbody>
+
+												<% for(var key in urlParameters) { 
+
+														var keyData = urlParameters[key]
+
+												%>
+
+													<tr>
+														<td><%=key%></td>
+														<td><%=keyData.type || "Not Specified" %></td>
+														<td><%=keyData.required || false %></td>
+														<td><%=keyData.description || "" %></td>
+													</tr>
+
+												<% } %>
+
+											</tbody>
+										</table>
+
+	                    		<% } %>
+
+	                    		<% 
+
+	                    			var postParameters = endpoints[i].postParameters;
+
+	                    			if(postParameters && Object.keys(postParameters).length > 0) { %>
+
+	                    			<h5>Required POST Parameters</h5>
+
+										<table class="table table-striped">
+											<thead>
+												<tr>
+												<th>Key</th>
+												<th>Type</th>
+												<th>Required</th>
+												<th>Description</th>
+												</tr>
+											</thead>
+											<tbody>
+
+												<% for(var key in postParameters) { 
+
+														var keyData = postParameters[key]
+
+												%>
+
+													<tr>
+														<td><%=key%></td>
+														<td><%=keyData.type || "Not Specified" %></td>
+														<td><%=keyData.required || false %></td>
+														<td><%=keyData.description || "" %></td>
+													</tr>
+
+												<% } %>
+
+											</tbody>
+										</table>
+
+	                    		<% } %>
+
+	                    	</div>
+
+	                    	<br>
+
+	                    	<% if(endpoints[i].responses && endpoints[i].responses.success) { %>
+
+		                    	<div style="width: 50%; float: left;">
+
+	                    			<h5>Example Response - <span class="label label-success">Success</span></h5>
+
+	                    			<pre><%- prettyPrint(endpoints[i].responses.success) %></pre>
+
+	                    		</div>
+
+	                    	<% } %>
+
+	                    	<% if(endpoints[i].responses && endpoints[i].responses.success) { %>
+
+	                    		<div style="width: 50%; float: right;">
+
+	                    			<h5>Example Response - <span class="label label-important">Error</span></h5>	                    			
+	                    			<pre><%- prettyPrint(endpoints[i].responses.error) %></pre>
+
+	                    		</div>
+
+	                    	<% } %>
+
+						</div>
+                  	</div>
+            
+        		<% } %>
+
+        	</div>
+
+        </div>
+
+	</body>
+
+</html>
