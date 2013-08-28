@@ -35,11 +35,10 @@
 
 		<div class="accordion" id="endpoints">
 
-			<div class="accordion-group">
+			<% for(var i = 0; i < endpoints.length; i++) { %>
 
-				<% for(var i = 0; i < endpoints.length; i++) { %>
+				<div class="accordion-group">
 			
-                
                   	<div class="accordion-heading">
 	                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse-<%=i%>">
 	                      	<% 
@@ -99,87 +98,127 @@
 
 	                    	</div>
 
-	                    	<div style="width: 80%; float: right;">
+	                    	<% if((endpoints[i].urlParameters && Object.keys(endpoints[i].urlParameters).length > 0) || (endpoints[i].postParameters && Object.keys(endpoints[i].postParameters).length > 0)) { %>
 
-	                    		<% 
+		                    	<div style="width: 80%; float: right;">
 
-	                    			var urlParameters = endpoints[i].urlParameters;
+		                    		<div class="accordion" id="accordion-params">
 
-	                    			if(urlParameters && Object.keys(urlParameters).length > 0) { %>
+			                    		<% 
 
-	                    			<h5>Required URL Parameters</h5>
+			                    			var urlParameters = endpoints[i].urlParameters;
 
-										<table class="table table-striped">
-											<thead>
-												<tr>
-												<th>Key</th>
-												<th>Type</th>
-												<th>Required</th>
-												<th>Description</th>
-												</tr>
-											</thead>
-											<tbody>
+			                    			if(urlParameters && Object.keys(urlParameters).length > 0) { 
 
-												<% for(var key in urlParameters) { 
+			                    		%>
 
-														var keyData = urlParameters[key]
+											<div class="accordion-group">
+										
+							                  	<div class="accordion-heading">
+								                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-params" href="#collapse-<%=i%>-urlparams">Required URL Parameters</a>
+					                  			</div>
 
-												%>
+							                  	<div id="collapse-<%=i%>-urlparams" class="accordion-body collapse">
+							                    	<div class="accordion-inner">
 
-													<tr>
-														<td><%=key%></td>
-														<td><%=keyData.type || "Not Specified" %></td>
-														<td><%=keyData.required || false %></td>
-														<td><%=keyData.description || "" %></td>
-													</tr>
+														<table class="table table-striped">
+															<thead>
+																<tr>
+																<th>Key</th>
+																<th>Type</th>
+																<th>Required</th>
+																<th>Description</th>
+																</tr>
+															</thead>
+															<tbody>
 
-												<% } %>
+																<% for(var key in urlParameters) { 
 
-											</tbody>
-										</table>
+																		var keyData = urlParameters[key]
 
-	                    		<% } %>
+																%>
 
-	                    		<% 
+																	<tr>
+																		<td><%=key%></td>
+																		<td><%=keyData.type || "Not Specified" %></td>
+																		<td><%=keyData.required || false %></td>
+																		<td><%=keyData.description || "" %></td>
+																	</tr>
 
-	                    			var postParameters = endpoints[i].postParameters;
+																<% } %>
 
-	                    			if(postParameters && Object.keys(postParameters).length > 0) { %>
+															</tbody>
 
-	                    			<h5>Required POST Parameters</h5>
+														</table>
 
-										<table class="table table-striped">
-											<thead>
-												<tr>
-												<th>Key</th>
-												<th>Type</th>
-												<th>Required</th>
-												<th>Description</th>
-												</tr>
-											</thead>
-											<tbody>
+													</div>
 
-												<% for(var key in postParameters) { 
+												</div>
 
-														var keyData = postParameters[key]
+											</div>
 
-												%>
+		                    			<% } %>
 
-													<tr>
-														<td><%=key%></td>
-														<td><%=keyData.type || "Not Specified" %></td>
-														<td><%=keyData.required || false %></td>
-														<td><%=keyData.description || "" %></td>
-													</tr>
+			                    		<% 
 
-												<% } %>
+			                    			var postParameters = endpoints[i].postParameters;
 
-											</tbody>
-										</table>
+			                    			if(postParameters && Object.keys(postParameters).length > 0) {
 
-	                    		<% } %>
+			                    		%>
 
-	                    	</div>
+		                    				<div class="accordion-group">
+										
+							                  	<div class="accordion-heading">
+								                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-params" href="#collapse-<%=i%>-postparams">Required POST Parameters</a>
+					                  			</div>
+
+					                  			<div id="collapse-<%=i%>-postparams" class="accordion-body collapse">
+
+							                    	<div class="accordion-inner">
+
+														<table class="table table-striped">
+															<thead>
+																<tr>
+																<th>Key</th>
+																<th>Type</th>
+																<th>Required</th>
+																<th>Description</th>
+																</tr>
+															</thead>
+															<tbody>
+
+																<% for(var key in postParameters) { 
+
+																		var keyData = postParameters[key]
+
+																%>
+
+																	<tr>
+																		<td><%=key%></td>
+																		<td><%=keyData.type || "Not Specified" %></td>
+																		<td><%=keyData.required || false %></td>
+																		<td><%=keyData.description || "" %></td>
+																	</tr>
+
+																<% } %>
+
+															</tbody>
+														</table>
+
+													</div>
+
+												</div>
+
+											</div>
+
+	                    				<% } %>
+
+		                    		</div>
+
+		                    	</div>
+
+		                    <% } %>
 
 	                    	<br>
 
@@ -195,7 +234,7 @@
 
 	                    	<% } %>
 
-	                    	<% if(endpoints[i].responses && endpoints[i].responses.success) { %>
+	                    	<% if(endpoints[i].responses && endpoints[i].responses.error) { %>
 
 	                    		<div style="width: 50%; float: right;">
 
@@ -207,11 +246,12 @@
 	                    	<% } %>
 
 						</div>
-                  	</div>
-            
-        		<% } %>
 
-        	</div>
+                  	</div>
+         
+        		</div>
+
+        	<% } %>
 
         </div>
 
