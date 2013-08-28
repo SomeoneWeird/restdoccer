@@ -5,6 +5,9 @@ var argv = require('optimist')
 	.demand([ 'file' ])
 	.alias('file', 'f')
 	.describe('file', 'File containing REST documentation JSON')
+	.alias('output', 'o')
+	.describe('output', 'Output directory')
+	.default('output', 'output')
 	.argv;
 
 var fs = require('fs');
@@ -33,9 +36,9 @@ try {
 
 }
 
-if(!fs.existsSync('output')) {
+if(!fs.existsSync(argv.output)) {
 
-	fs.mkdirSync('output');
+	fs.mkdirSync(argv.output);
 
 	console.log("Created directory output...");
 
@@ -71,6 +74,6 @@ js_files.forEach(function(file) {
 });
 
 
-fs.writeFileSync('output/index.html', index_html);
+fs.writeFileSync(argv.output + '/index.html', index_html);
 
 console.log("Merged files, finished.");
