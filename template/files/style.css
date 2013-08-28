@@ -2,7 +2,10 @@ pre {
 	background-color: ghostwhite;
 	border: 1px solid silver;
 	padding: 10px 20px;
-	margin: 20px; 
+	margin: 20px;
+	width: 85%;
+	margin-left: auto;
+	margin-right: auto;
 }
 .json-key {
 	color: brown;
@@ -27,5 +30,11 @@ pre {
 	width: 90%;
 	margin-left: auto;
 	margin-right: auto;
+
+}
+
+.in {
+
+	padding-bottom: 1%;
 
 }
