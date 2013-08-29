@@ -1,7 +1,7 @@
 {
   "name": "restdoccer",
   "preferGlobal": true,
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Generate self-contained, offline REST API docs from a JSON file.",
   "bin": "./restdoccer.js",
   "dependencies": {
