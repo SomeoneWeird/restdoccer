@@ -17,6 +17,16 @@ pre {
 	color: olive;
 }
 
+.accordion {
+	padding-top: 1%;
+}
+
+.in {
+
+	padding-bottom: 1%;
+
+}
+
 #header {
 
 	text-align: center;
@@ -33,8 +43,8 @@ pre {
 
 }
 
-.in {
-
-	padding-bottom: 1%;
+.copyright {
+	
+	text-align: center;
 
 }
