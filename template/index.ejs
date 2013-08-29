@@ -112,6 +112,10 @@
 
 	                      				badge = 'label-info';
 
+	                      			} else if(method == "DELETE") {
+
+	                      				badge = 'label-danger';
+
 	                      			}
 
 		                      	%>
@@ -155,157 +159,146 @@
 
 								<% } %>
 
-	                    		<div style="width: 20%; float: left;">
-
-		                    		<h5>Method</h5>
-
-		                    		<%=method%>
-
-		                    	</div>
-
 		                    	<% if((endpoints[i].urlParameters && Object.keys(endpoints[i].urlParameters).length > 0) || (endpoints[i].postParameters && Object.keys(endpoints[i].postParameters).length > 0)) { %>
 
-			                    	<div style="width: 80%; float: right;">
 
-			                    		<div class="accordion" id="accordion-params">
+		                    		<div class="accordion" id="accordion-params">
 
-				                    		<% 
+			                    		<% 
 
-				                    			var urlParameters = endpoints[i].urlParameters;
+			                    			var urlParameters = endpoints[i].urlParameters;
 
-				                    			if(urlParameters && Object.keys(urlParameters).length > 0) { 
+			                    			if(urlParameters && Object.keys(urlParameters).length > 0) { 
 
-				                    		%>
+			                    		%>
 
-												<div class="accordion-group">
-											
-								                  	<div class="accordion-heading">
-									                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-params" href="#collapse-<%=i%>-urlparams">Required URL Parameters</a>
-						                  			</div>
+											<div class="accordion-group">
+										
+							                  	<div class="accordion-heading">
+								                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-params" href="#collapse-<%=i%>-urlparams">Required URL Parameters</a>
+					                  			</div>
 
-								                  	<div id="collapse-<%=i%>-urlparams" class="accordion-body collapse">
-								                    	<div class="accordion-inner">
+							                  	<div id="collapse-<%=i%>-urlparams" class="accordion-body collapse">
+							                    	<div class="accordion-inner">
 
-															<table class="table table-striped">
-																<thead>
+														<table class="table table-striped">
+															<thead>
+																<tr>
+																<th>Key</th>
+																<th>Type</th>
+																<th>Required</th>
+																<th>Description</th>
+																</tr>
+															</thead>
+															<tbody>
+
+																<% for(var key in urlParameters) { 
+
+																		var keyData = urlParameters[key]
+
+																%>
+
 																	<tr>
-																	<th>Key</th>
-																	<th>Type</th>
-																	<th>Required</th>
-																	<th>Description</th>
+																		<td><%=key%></td>
+																		<td><%=keyData.type || "Unspecified" %></td>
+																		<td><%=keyData.required || false %></td>
+																		<td><%=keyData.description || "" %></td>
 																	</tr>
-																</thead>
-																<tbody>
 
-																	<% for(var key in urlParameters) { 
+																<% } %>
 
-																			var keyData = urlParameters[key]
+															</tbody>
 
-																	%>
-
-																		<tr>
-																			<td><%=key%></td>
-																			<td><%=keyData.type || "Not Specified" %></td>
-																			<td><%=keyData.required || false %></td>
-																			<td><%=keyData.description || "" %></td>
-																		</tr>
-
-																	<% } %>
-
-																</tbody>
-
-															</table>
-
-														</div>
+														</table>
 
 													</div>
 
 												</div>
 
-			                    			<% } else { %>
+											</div>
 
-			                    				<div class="accordion-group">
-											
-								                  	<div class="accordion-heading">
-									                    <span class="accordion-toggle">
-									                    	No required URL Parameters
-									                    </span>
-						                  			</div>
+		                    			<% } else { %>
 
-						                  		</div>
+		                    				<div class="accordion-group">
+										
+							                  	<div class="accordion-heading">
+								                    <span class="accordion-toggle">
+								                    	No required URL Parameters
+								                    </span>
+					                  			</div>
 
-						                  	<% } %>
+					                  		</div>
 
-				                    		<% 
+					                  	<% } %>
 
-				                    			var postParameters = endpoints[i].postParameters;
+			                    		<% 
 
-				                    			if(postParameters && Object.keys(postParameters).length > 0) {
+			                    			var postParameters = endpoints[i].postParameters;
 
-				                    		%>
+			                    			if(postParameters && Object.keys(postParameters).length > 0) {
 
-			                    				<div class="accordion-group">
-											
-								                  	<div class="accordion-heading">
-									                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-params" href="#collapse-<%=i%>-postparams">Required POST Parameters</a>
-						                  			</div>
+			                    		%>
 
-						                  			<div id="collapse-<%=i%>-postparams" class="accordion-body collapse ">
+		                    				<div class="accordion-group">
+										
+							                  	<div class="accordion-heading">
+								                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-params" href="#collapse-<%=i%>-postparams">Required POST Parameters</a>
+					                  			</div>
 
-								                    	<div class="accordion-inner">
+					                  			<div id="collapse-<%=i%>-postparams" class="accordion-body collapse ">
 
-															<table class="table table-striped">
-																<thead>
+							                    	<div class="accordion-inner">
+
+														<table class="table table-striped">
+															<thead>
+																<tr>
+																<th>Key</th>
+																<th>Type</th>
+																<th>Required</th>
+																<th>Description</th>
+																</tr>
+															</thead>
+															<tbody>
+
+																<% for(var key in postParameters) { 
+
+																		var keyData = postParameters[key]
+
+																%>
+
 																	<tr>
-																	<th>Key</th>
-																	<th>Type</th>
-																	<th>Required</th>
-																	<th>Description</th>
+																		<td><%=key%></td>
+																		<td><%=keyData.type || "Unspecified" %></td>
+																		<td><%=keyData.required || false %></td>
+																		<td><%=keyData.description || "" %></td>
 																	</tr>
-																</thead>
-																<tbody>
 
-																	<% for(var key in postParameters) { 
+																<% } %>
 
-																			var keyData = postParameters[key]
-
-																	%>
-
-																		<tr>
-																			<td><%=key%></td>
-																			<td><%=keyData.type || "Not Specified" %></td>
-																			<td><%=keyData.required || false %></td>
-																			<td><%=keyData.description || "" %></td>
-																		</tr>
-
-																	<% } %>
-
-																</tbody>
-															</table>
-
-														</div>
+															</tbody>
+														</table>
 
 													</div>
 
 												</div>
 
-		                    				<% } else { %>
+											</div>
 
-		                    					<div class="accordion-group">
-											
-								                  	<div class="accordion-heading">
-									                    <span class="accordion-toggle">
-									                    	No required POST Parameters
-									                    </span>
-						                  			</div>
+	                    				<% } else { %>
 
-						                  		</div>
+	                    					<div class="accordion-group">
+										
+							                  	<div class="accordion-heading">
+								                    <span class="accordion-toggle">
+								                    	No required POST Parameters
+								                    </span>
+					                  			</div>
 
-						                  	<% } %>
+					                  		</div>
 
-			                    		</div>
+					                  	<% } %>
 
-			                    	</div>
+		                    		</div>
 
 			                    <% } %>
 
@@ -315,7 +308,7 @@
 
 			                    	<div style="width: 50%; float: left;">
 
-		                    			<h5>Example Response - <span class="label label-success">Success</span></h5>
+		                    			<h5><span class="label label-success">Successful Response</span></h5>
 
 		                    			<% if(endpoints[i].responses.success_msg) { %>
 
@@ -334,7 +327,7 @@
 
 		                    		<div style="width: 50%; float: right;">
 
-		                    			<h5>Example Response - <span class="label label-important">Error</span></h5>	                    			
+		                    			<h5><span class="label label-important">Response on error</span></h5>	                    			
 		                    			<% if(endpoints[i].responses.error_msg) { %>
 
 		                    				<h6><%=endpoints[i].responses.error_msg %></h6>
