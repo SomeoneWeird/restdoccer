@@ -55,9 +55,11 @@ if(!fs.existsSync(argv.output)) {
 
 if(doc_json.logo) {
 
+	console.log("Converting logo to data uri...");
+
 	var logo = fs.readFileSync(doc_json.logo);
 
-	var data_uri_prefix = "data:image/png;base64,";
+    var data_uri_prefix = "data:image/png;base64,";
     var image = data_uri_prefix + new Buffer(logo, 'binary').toString('base64'); 
 
     doc_json.logo = image;
@@ -76,7 +78,7 @@ for(var i = 0; i < doc_json.endpoints.length; i++) {
 
 var index_html = ejs.render(index_template, doc_json);
 
-console.log("Generated index.html, merging files.");
+console.log("Rendered index.html");
 
 // js_files is in reverse order
 
@@ -94,24 +96,29 @@ var css_files = [
 ]
 
 css_files.forEach(function(file) {
-	var file = fs.readFileSync(__dirname + '/template/files/' + file).toString();
+	var data = fs.readFileSync(__dirname + '/template/files/' + file).toString();
 	if(argv.minify) {
-		file = min_css.minify(file);
+		console.log("Compressing " + file);
+		data = min_css.minify(data);
 	}
-	data = "<style>" + file + "</style>";
+	console.log("Merging " + file + "...");
+	data = "<style>" + data + "</style>";
 	index_html = index_html.replace("<head>", "<head>" + data);
 });
 
 js_files.forEach(function(file) {
-	var file = fs.readFileSync(__dirname + '/template/files/' + file).toString();
+	var data = fs.readFileSync(__dirname + '/template/files/' + file).toString();
 	if(argv.minify) {
-		file = min_js.minify(file, { fromString: true }).code;
+		console.log("Minifying " + file);
+		data = min_js.minify(data, { fromString: true }).code;
 	}
-	data = "<script>" + file + "</script>";
+	console.log("Merging " + file + "...");
+	data = "<script>" + data + "</script>";
 	index_html = index_html.replace("<head>", "<head>" + data);
 });
 
 if(argv.minify) {
+	console.log("Cleaning HTML....");
 	index_html = min_html.minify(index_html, {
 	 removeComments: true,
 	 removeCommentsFromCDATA: true,
