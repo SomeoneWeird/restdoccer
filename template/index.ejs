@@ -33,6 +33,12 @@
 
 		<div id="header">
 
+			<% if(url) { %>
+
+				<span class="logo"><a href="<%= url %>"><img src="<%= logo %>"></img></a></span>
+
+			<% } %>
+
 			<h1><%= name %></h1>
 
 		</div>
@@ -295,6 +301,10 @@
         	<% } %>
 
         </div>
+
+        <% if(copyright) { %>
+	        <div class="copyright"><%= copyright %> &copy;</div>
+        <% } %>
 
 	</body>
 

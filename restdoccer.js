@@ -44,6 +44,19 @@ if(!fs.existsSync(argv.output)) {
 
 }
 
+// inline logo image
+
+if(doc_json.logo) {
+
+	var logo = fs.readFileSync(doc_json.logo);
+
+	var data_uri_prefix = "data:image/png;base64,";
+    var image = data_uri_prefix + new Buffer(logo, 'binary').toString('base64'); 
+
+    doc_json.logo = image;
+
+}
+
 var index_html = ejs.render(index_template, doc_json);
 
 console.log("Generated index.html, merging files.");
