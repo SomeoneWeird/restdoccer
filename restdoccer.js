@@ -8,11 +8,18 @@ var argv = require('optimist')
 	.alias('output', 'o')
 	.describe('output', 'Output directory')
 	.default('output', 'output')
+	.describe('minify', "Minify HTML output")
+	.alias('minify', 'm')
+	.default('minify', true)
 	.argv;
 
 var fs = require('fs');
 
 var ejs = require('ejs');
+
+var min_html = require('html-minifier');
+var min_css  = require('sqwish');
+var min_js   = require("uglify-js");
 
 var index_template = fs.readFileSync(__dirname + '/template/index.ejs').toString();
 
@@ -88,15 +95,32 @@ var css_files = [
 
 css_files.forEach(function(file) {
 	var file = fs.readFileSync(__dirname + '/template/files/' + file).toString();
+	if(argv.minify) {
+		file = min_css.minify(file);
+	}
 	data = "<style>" + file + "</style>";
 	index_html = index_html.replace("<head>", "<head>" + data);
 });
 
 js_files.forEach(function(file) {
 	var file = fs.readFileSync(__dirname + '/template/files/' + file).toString();
+	if(argv.minify) {
+		file = min_js.minify(file, { fromString: true }).code;
+	}
 	data = "<script>" + file + "</script>";
 	index_html = index_html.replace("<head>", "<head>" + data);
 });
+
+if(argv.minify) {
+	index_html = min_html.minify(index_html, {
+	 removeComments: true,
+	 removeCommentsFromCDATA: true,
+	 collapseWhitespace: true,
+	 collapseBooleanAttributes: true,
+	 removeAttributeQuotes: true,
+	 removeEmptyAttributes: true
+	}).replace(/\n/g, '').replace(/\s{2,}/g, ' ');
+}
 
 
 fs.writeFileSync(argv.output + '/index.html', index_html);
