@@ -14,7 +14,7 @@ var fs = require('fs');
 
 var ejs = require('ejs');
 
-var index_template = fs.readFileSync('template/index.ejs').toString();
+var index_template = fs.readFileSync(__dirname + '/template/index.ejs').toString();
 
 if(!fs.existsSync(argv.file)) {
 
@@ -62,13 +62,13 @@ var css_files = [
 ]
 
 css_files.forEach(function(file) {
-	var file = fs.readFileSync('template/files/' + file).toString();
+	var file = fs.readFileSync(__dirname + '/template/files/' + file).toString();
 	data = "<style>" + file + "</style>";
 	index_html = index_html.replace("<head>", "<head>" + data);
 });
 
 js_files.forEach(function(file) {
-	var file = fs.readFileSync('template/files/' + file).toString();
+	var file = fs.readFileSync(__dirname + '/template/files/' + file).toString();
 	data = "<script>" + file + "</script>";
 	index_html = index_html.replace("<head>", "<head>" + data);
 });
