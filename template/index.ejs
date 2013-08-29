@@ -252,6 +252,13 @@
 
 	                    			<h5>Example Response - <span class="label label-success">Success</span></h5>
 
+	                    			<% if(endpoints[i].responses.success_msg) { %>
+
+	                    				<h6><%=endpoints[i].responses.success_msg %></h6>
+
+	                    			<% } %>
+
+
 	                    			<pre><%- prettyPrint(endpoints[i].responses.success) %></pre>
 
 	                    		</div>
@@ -263,6 +270,12 @@
 	                    		<div style="width: 50%; float: right;">
 
 	                    			<h5>Example Response - <span class="label label-important">Error</span></h5>	                    			
+	                    			<% if(endpoints[i].responses.error_msg) { %>
+
+	                    				<h6><%=endpoints[i].responses.error_msg %></h6>
+
+	                    			<% } %>
+
 	                    			<pre><%- prettyPrint(endpoints[i].responses.error) %></pre>
 
 	                    		</div>
