@@ -142,7 +142,15 @@
 								<% if(endpoints[i].experimental) { %>
 
 									<div class="alert alert-info">
-										This API is experimental and will probably change.
+										This API is experimental.
+									</div>
+
+								<% } %>
+
+								<% if(endpoints[i].development) { %>
+
+									<div class="alert alert-warning">
+										This API is under development.
 									</div>
 
 								<% } %>
