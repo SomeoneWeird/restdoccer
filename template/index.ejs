@@ -246,7 +246,7 @@
 
 	                    	<br>
 
-	                    	<% if(endpoints[i].responses && endpoints[i].responses.success) { %>
+	                    	<% if(endpoints[i].responses && endpoints[i].responses.success !== undefined) { %>
 
 		                    	<div style="width: 50%; float: left;">
 
@@ -258,7 +258,7 @@
 
 	                    	<% } %>
 
-	                    	<% if(endpoints[i].responses && endpoints[i].responses.error) { %>
+	                    	<% if(endpoints[i].responses && endpoints[i].responses.error !== undefined) { %>
 
 	                    		<div style="width: 50%; float: right;">
 
