@@ -31,280 +31,345 @@
 
 	<body>
 
-		<div id="header">
+		<div class="meny">
 
-			<% if(url) { %>
+			<% var points = {} %>
 
-				<span class="logo"><a href="<%= url %>"><img src="<%= logo %>"></img></a></span>
+			<% 
+
+				for(var i = 0; i < endpoints.length; i++) {
+
+					if(!points[endpoints[i].method]) points[endpoints[i].method] = [];
+
+					points[endpoints[i].method].push({
+						point: endpoints[i].endpoint,
+						index: i
+					});
+
+			    }
+
+			%>
+
+			<%
+
+				for(var method in points) { 
+
+			%>
+
+					<h5><%= method %></h5>
+
+					<%
+
+						for(var i = 0; i < points[method].length; i++) {
+
+					%>
+
+						<a onclick='scrollClick(<%=points[method][i].index%>)'><%=points[method][i].point%></a> <br>
+
+					<%
+
+						}
+
+					%>
 
 			<% } %>
 
-			<h1><%= name %></h1>
-
 		</div>
 
-		<div class="accordion" id="endpoints">
+		<div class="contents">
 
-			<% for(var i = 0; i < endpoints.length; i++) { %>
+			<div id="header">
 
-				<div class="accordion-group">
-			
-                  	<div class="accordion-heading">
-	                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse-<%=i%>">
-	                      	<% 
+				<% if(url) { %>
 
-                      			var method = endpoints[i].method; 
+					<span class="logo"><a href="<%= url %>"><img src="<%= logo %>"></img></a></span>
 
-                				var badge = 'label-default';
+				<% } %>
 
-                      			if(method == "GET") {
+				<h1><%= name %></h1>
 
-                      				badge = 'label-success';
+			</div>
 
-                      			} else if(method == "POST") {
+			<div class="accordion" id="endpoints">
 
-                      				badge = 'label-info';
+				<% for(var i = 0; i < endpoints.length; i++) { %>
 
-                      			}
+					<div class="accordion-group">
+				
+	                  	<div class="accordion-heading">
+		                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse-<%=i%>">
+		                      	<% 
 
-	                      	%>
+	                      			var method = endpoints[i].method; 
 
-	                      	<span class="label <%= badge %>"><%= method %></span>
+	                				var badge = 'label-default';
 
-	                      	<%= endpoints[i].endpoint %>
-	                    </a>
-                  	</div>
+	                      			if(method == "GET") {
 
-                  	<div id="collapse-<%=i%>" class="accordion-body collapse">
-                    	<div class="accordion-inner">
+	                      				badge = 'label-success';
 
-                    		<div class="page-header">
-							  <h1><%= endpoints[i].endpoint %> <br>
-							  <small><%= endpoints[i].description || '' %></small></h1>
-							</div>
+	                      			} else if(method == "POST") {
 
-							<% if(endpoints[i].deprecated) { %>
+	                      				badge = 'label-info';
 
-								<div class="alert">
-								  <button type="button" class="close" data-dismiss="alert">&times;</button>
-								  <strong>Warning!</strong> This endpoint has been deprecated.
+	                      			}
+
+		                      	%>
+
+		                      	<span class="label <%= badge %>"><%= method %></span>
+
+		                      	<%= endpoints[i].endpoint %>
+		                    </a>
+	                  	</div>
+
+	                  	<div id="collapse-<%=i%>" class="accordion-body collapse">
+	                    	<div class="accordion-inner">
+
+	                    		<div class="page-header">
+								  <h1><%= endpoints[i].endpoint %> <br>
+								  <small><%= endpoints[i].description || '' %></small></h1>
 								</div>
 
-							<% } %>
+								<% if(endpoints[i].deprecated) { %>
 
-							<% if(endpoints[i].experimental) { %>
+									<div class="alert">
+									  <button type="button" class="close" data-dismiss="alert">&times;</button>
+									  <strong>Warning!</strong> This endpoint has been deprecated.
+									</div>
 
-								<div class="alert alert-info">
-									This API is experimental and will probably change.
-								</div>
+								<% } %>
 
-							<% } %>
+								<% if(endpoints[i].experimental) { %>
 
-                    		<div style="width: 20%; float: left;">
+									<div class="alert alert-info">
+										This API is experimental and will probably change.
+									</div>
 
-	                    		<h5>Method</h5>
+								<% } %>
 
-	                    		<%=method%>
+	                    		<div style="width: 20%; float: left;">
 
-	                    	</div>
+		                    		<h5>Method</h5>
 
-	                    	<% if((endpoints[i].urlParameters && Object.keys(endpoints[i].urlParameters).length > 0) || (endpoints[i].postParameters && Object.keys(endpoints[i].postParameters).length > 0)) { %>
-
-		                    	<div style="width: 80%; float: right;">
-
-		                    		<div class="accordion" id="accordion-params">
-
-			                    		<% 
-
-			                    			var urlParameters = endpoints[i].urlParameters;
-
-			                    			if(urlParameters && Object.keys(urlParameters).length > 0) { 
-
-			                    		%>
-
-											<div class="accordion-group">
-										
-							                  	<div class="accordion-heading">
-								                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-params" href="#collapse-<%=i%>-urlparams">Required URL Parameters</a>
-					                  			</div>
-
-							                  	<div id="collapse-<%=i%>-urlparams" class="accordion-body collapse">
-							                    	<div class="accordion-inner">
-
-														<table class="table table-striped">
-															<thead>
-																<tr>
-																<th>Key</th>
-																<th>Type</th>
-																<th>Required</th>
-																<th>Description</th>
-																</tr>
-															</thead>
-															<tbody>
-
-																<% for(var key in urlParameters) { 
-
-																		var keyData = urlParameters[key]
-
-																%>
-
-																	<tr>
-																		<td><%=key%></td>
-																		<td><%=keyData.type || "Not Specified" %></td>
-																		<td><%=keyData.required || false %></td>
-																		<td><%=keyData.description || "" %></td>
-																	</tr>
-
-																<% } %>
-
-															</tbody>
-
-														</table>
-
-													</div>
-
-												</div>
-
-											</div>
-
-		                    			<% } else { %>
-
-		                    				<div class="accordion-group">
-										
-							                  	<div class="accordion-heading">
-								                    <span class="accordion-toggle">
-								                    	No required URL Parameters
-								                    </span>
-					                  			</div>
-
-					                  		</div>
-
-					                  	<% } %>
-
-			                    		<% 
-
-			                    			var postParameters = endpoints[i].postParameters;
-
-			                    			if(postParameters && Object.keys(postParameters).length > 0) {
-
-			                    		%>
-
-		                    				<div class="accordion-group">
-										
-							                  	<div class="accordion-heading">
-								                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-params" href="#collapse-<%=i%>-postparams">Required POST Parameters</a>
-					                  			</div>
-
-					                  			<div id="collapse-<%=i%>-postparams" class="accordion-body collapse">
-
-							                    	<div class="accordion-inner">
-
-														<table class="table table-striped">
-															<thead>
-																<tr>
-																<th>Key</th>
-																<th>Type</th>
-																<th>Required</th>
-																<th>Description</th>
-																</tr>
-															</thead>
-															<tbody>
-
-																<% for(var key in postParameters) { 
-
-																		var keyData = postParameters[key]
-
-																%>
-
-																	<tr>
-																		<td><%=key%></td>
-																		<td><%=keyData.type || "Not Specified" %></td>
-																		<td><%=keyData.required || false %></td>
-																		<td><%=keyData.description || "" %></td>
-																	</tr>
-
-																<% } %>
-
-															</tbody>
-														</table>
-
-													</div>
-
-												</div>
-
-											</div>
-
-	                    				<% } else { %>
-
-	                    					<div class="accordion-group">
-										
-							                  	<div class="accordion-heading">
-								                    <span class="accordion-toggle">
-								                    	No required POST Parameters
-								                    </span>
-					                  			</div>
-
-					                  		</div>
-
-					                  	<% } %>
-
-		                    		</div>
+		                    		<%=method%>
 
 		                    	</div>
 
-		                    <% } %>
+		                    	<% if((endpoints[i].urlParameters && Object.keys(endpoints[i].urlParameters).length > 0) || (endpoints[i].postParameters && Object.keys(endpoints[i].postParameters).length > 0)) { %>
 
-	                    	<br>
+			                    	<div style="width: 80%; float: right;">
 
-	                    	<% if(endpoints[i].responses && endpoints[i].responses.success !== undefined) { %>
+			                    		<div class="accordion" id="accordion-params">
 
-		                    	<div style="width: 50%; float: left;">
+				                    		<% 
 
-	                    			<h5>Example Response - <span class="label label-success">Success</span></h5>
+				                    			var urlParameters = endpoints[i].urlParameters;
 
-	                    			<% if(endpoints[i].responses.success_msg) { %>
+				                    			if(urlParameters && Object.keys(urlParameters).length > 0) { 
 
-	                    				<h6><%=endpoints[i].responses.success_msg %></h6>
+				                    		%>
 
-	                    			<% } %>
+												<div class="accordion-group">
+											
+								                  	<div class="accordion-heading">
+									                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-params" href="#collapse-<%=i%>-urlparams">Required URL Parameters</a>
+						                  			</div>
+
+								                  	<div id="collapse-<%=i%>-urlparams" class="accordion-body collapse">
+								                    	<div class="accordion-inner">
+
+															<table class="table table-striped">
+																<thead>
+																	<tr>
+																	<th>Key</th>
+																	<th>Type</th>
+																	<th>Required</th>
+																	<th>Description</th>
+																	</tr>
+																</thead>
+																<tbody>
+
+																	<% for(var key in urlParameters) { 
+
+																			var keyData = urlParameters[key]
+
+																	%>
+
+																		<tr>
+																			<td><%=key%></td>
+																			<td><%=keyData.type || "Not Specified" %></td>
+																			<td><%=keyData.required || false %></td>
+																			<td><%=keyData.description || "" %></td>
+																		</tr>
+
+																	<% } %>
+
+																</tbody>
+
+															</table>
+
+														</div>
+
+													</div>
+
+												</div>
+
+			                    			<% } else { %>
+
+			                    				<div class="accordion-group">
+											
+								                  	<div class="accordion-heading">
+									                    <span class="accordion-toggle">
+									                    	No required URL Parameters
+									                    </span>
+						                  			</div>
+
+						                  		</div>
+
+						                  	<% } %>
+
+				                    		<% 
+
+				                    			var postParameters = endpoints[i].postParameters;
+
+				                    			if(postParameters && Object.keys(postParameters).length > 0) {
+
+				                    		%>
+
+			                    				<div class="accordion-group">
+											
+								                  	<div class="accordion-heading">
+									                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-params" href="#collapse-<%=i%>-postparams">Required POST Parameters</a>
+						                  			</div>
+
+						                  			<div id="collapse-<%=i%>-postparams" class="accordion-body collapse ">
+
+								                    	<div class="accordion-inner">
+
+															<table class="table table-striped">
+																<thead>
+																	<tr>
+																	<th>Key</th>
+																	<th>Type</th>
+																	<th>Required</th>
+																	<th>Description</th>
+																	</tr>
+																</thead>
+																<tbody>
+
+																	<% for(var key in postParameters) { 
+
+																			var keyData = postParameters[key]
+
+																	%>
+
+																		<tr>
+																			<td><%=key%></td>
+																			<td><%=keyData.type || "Not Specified" %></td>
+																			<td><%=keyData.required || false %></td>
+																			<td><%=keyData.description || "" %></td>
+																		</tr>
+
+																	<% } %>
+
+																</tbody>
+															</table>
+
+														</div>
+
+													</div>
+
+												</div>
+
+		                    				<% } else { %>
+
+		                    					<div class="accordion-group">
+											
+								                  	<div class="accordion-heading">
+									                    <span class="accordion-toggle">
+									                    	No required POST Parameters
+									                    </span>
+						                  			</div>
+
+						                  		</div>
+
+						                  	<% } %>
+
+			                    		</div>
+
+			                    	</div>
+
+			                    <% } %>
+
+		                    	<br>
+
+		                    	<% if(endpoints[i].responses && endpoints[i].responses.success !== undefined) { %>
+
+			                    	<div style="width: 50%; float: left;">
+
+		                    			<h5>Example Response - <span class="label label-success">Success</span></h5>
+
+		                    			<% if(endpoints[i].responses.success_msg) { %>
+
+		                    				<h6><%=endpoints[i].responses.success_msg %></h6>
+
+		                    			<% } %>
 
 
-	                    			<pre><%- prettyPrint(endpoints[i].responses.success) %></pre>
+		                    			<pre><%- prettyPrint(endpoints[i].responses.success) %></pre>
 
-	                    		</div>
+		                    		</div>
 
-	                    	<% } %>
+		                    	<% } %>
 
-	                    	<% if(endpoints[i].responses && endpoints[i].responses.error !== undefined) { %>
+		                    	<% if(endpoints[i].responses && endpoints[i].responses.error !== undefined) { %>
 
-	                    		<div style="width: 50%; float: right;">
+		                    		<div style="width: 50%; float: right;">
 
-	                    			<h5>Example Response - <span class="label label-important">Error</span></h5>	                    			
-	                    			<% if(endpoints[i].responses.error_msg) { %>
+		                    			<h5>Example Response - <span class="label label-important">Error</span></h5>	                    			
+		                    			<% if(endpoints[i].responses.error_msg) { %>
 
-	                    				<h6><%=endpoints[i].responses.error_msg %></h6>
+		                    				<h6><%=endpoints[i].responses.error_msg %></h6>
 
-	                    			<% } %>
+		                    			<% } %>
 
-	                    			<pre><%- prettyPrint(endpoints[i].responses.error) %></pre>
+		                    			<pre><%- prettyPrint(endpoints[i].responses.error) %></pre>
 
-	                    		</div>
+		                    		</div>
 
-	                    	<% } %>
+		                    	<% } %>
 
-						</div>
+							</div>
 
-                  	</div>
-         
-        		</div>
+	                  	</div>
+	         
+	        		</div>
 
-        	<% } %>
+	        	<% } %>
 
-        </div>
+	        </div>
 
-        <% if(copyright) { %>
-	        <div class="copyright"><%= copyright %> &copy;</div>
-        <% } %>
+	        <% if(copyright) { %>
+		        <div class="copyright"><%= copyright %> &copy;</div>
+	        <% } %>
+
+	    </div>
+
+	    <script>
+
+	    	var meny = Meny.create({
+			    menuElement: document.querySelector( '.meny' ),
+			    contentsElement: document.querySelector( '.contents' ),
+			});
+
+			var scrollClick = function(index) {
+
+				meny.close();
+				$('.contents').animate({ scrollTop: $('#collapse-' + index).offset().top }, 300);			
+
+			}
+
+		</script>
 
 	</body>
 

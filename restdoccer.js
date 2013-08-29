@@ -57,6 +57,16 @@ if(doc_json.logo) {
 
 }
 
+for(var i = 0; i < doc_json.endpoints.length; i++) {
+
+	if(!doc_json.endpoints[i].method) {
+
+		doc_json.endpoints[i].method = "UNKNOWN";
+
+	}
+
+}
+
 var index_html = ejs.render(index_template, doc_json);
 
 console.log("Generated index.html, merging files.");
@@ -64,6 +74,7 @@ console.log("Generated index.html, merging files.");
 // js_files is in reverse order
 
 var js_files = [
+	'meny.min.js',
 	'bootstrap.js',
 	'jquery.js'
 ]
@@ -71,6 +82,7 @@ var js_files = [
 var css_files = [
 	'bootstrap.css',
 	'bootstrap-responsive.css',
+	'meny.css',
 	'style.css'
 ]
 
