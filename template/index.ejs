@@ -33,44 +33,41 @@
 
 		<div class="meny">
 
-			<% var points = {} %>
+			<% if(Object.keys(groups).length > 0) { %>
 
-			<% 
+				<h3>Groups</h3>
 
-				for(var i = 0; i < endpoints.length; i++) {
+				<% 
 
-					if(!points[endpoints[i].method]) points[endpoints[i].method] = [];
+					for(var group in groups) { 
 
-					points[endpoints[i].method].push({
-						point: endpoints[i].endpoint,
-						index: i
-					});
+				%>
 
-			    }
-
-			%>
-
-			<%
-
-				for(var method in points) { 
-
-			%>
-
-					<h5><%= method %></h5>
+					<h5><%= group %></h5>
 
 					<%
 
-						for(var i = 0; i < points[method].length; i++) {
+						for(var i = 0; i < groups[group].length; i++) {
 
 					%>
 
-						<a onclick='scrollClick(<%=points[method][i].index%>)'><%=points[method][i].point%></a> <br>
+						<a onclick='scrollClick(<%=groups[group][i].index%>)'><%=groups[group][i].endpoint%></a> <br>
 
 					<%
 
 						}
 
 					%>
+
+				<%
+
+					}
+
+				%>
+
+			<% } else { %>
+
+				<h3>No groups defined.</h3>
 
 			<% } %>
 
@@ -123,6 +120,19 @@
 		                      	<span class="label <%= badge %>"><%= method %></span>
 
 		                      	<%= endpoints[i].endpoint %>
+
+		                      	<% if(endpoints[i].tags && endpoints[i].tags.length > 0) { %>
+		                      		<span class="label label-default pull-right"><%= endpoints[i].tags[i] %></span>
+		                      	<% } %>
+
+		                      	<% if(endpoints[i].experimental) { %>
+		                      		<span class="label label-warning pull-right">experimental</span>
+		                      	<% } %>
+
+		                      	<% if(endpoints[i].development) { %>
+		                      		<span class="label label-important pull-right">development</span>
+		                      	<% } %>
+
 		                    </a>
 	                  	</div>
 
