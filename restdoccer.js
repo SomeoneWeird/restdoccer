@@ -66,7 +66,20 @@ if(doc_json.logo) {
 
 }
 
+var groups = {};
+
 for(var i = 0; i < doc_json.endpoints.length; i++) {
+
+	if(doc_json.endpoints[i].group) {
+
+		if(!groups[doc_json.endpoints[i].group]) groups[doc_json.endpoints[i].group] = [];
+
+		groups[doc_json.endpoints[i].group].push({
+			endpoint: doc_json.endpoints[i].endpoint,
+			index: i
+		});
+
+	}
 
 	if(!doc_json.endpoints[i].method) {
 
@@ -75,6 +88,8 @@ for(var i = 0; i < doc_json.endpoints.length; i++) {
 	}
 
 }
+
+doc_json.groups = groups;
 
 var index_html = ejs.render(index_template, doc_json);
 
