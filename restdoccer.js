@@ -6,8 +6,7 @@ var argv = require('optimist')
 	.alias('file', 'f')
 	.describe('file', 'File containing REST documentation JSON')
 	.alias('output', 'o')
-	.describe('output', 'Output directory')
-	.default('output', 'output')
+	.describe('output', 'Output file')
 	.describe('minify', "Minify HTML output")
 	.alias('minify', 'm')
 	.default('minify', true)
@@ -47,14 +46,6 @@ if(!doc_json.endpoints || doc_json.endpoints.length == 0) {
 
 	console.error("No specified endpoints, exiting.");
 	process.exit();
-
-}
-
-if(!fs.existsSync(argv.output)) {
-
-	fs.mkdirSync(argv.output);
-
-	console.log("Created directory output...");
 
 }
 
@@ -151,7 +142,13 @@ if(argv.minify) {
 	}).replace(/\n/g, '').replace(/\s{2,}/g, ' ');
 }
 
+if(!argv.output) {
+	var filename = argv.file.split('.');
+	filename.pop();
+	argv.output = filename.join('.') + '.html';
+}
 
-fs.writeFileSync(argv.output + '/index.html', index_html);
+
+fs.writeFileSync(argv.output, index_html);
 
 console.log("Merged files, finished.");
