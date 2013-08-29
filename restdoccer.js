@@ -43,6 +43,13 @@ try {
 
 }
 
+if(!doc_json.endpoints || doc_json.endpoints.length == 0) {
+
+	console.error("No specified endpoints, exiting.");
+	process.exit();
+
+}
+
 if(!fs.existsSync(argv.output)) {
 
 	fs.mkdirSync(argv.output);
