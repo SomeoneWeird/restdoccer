@@ -6,7 +6,10 @@
   "bin": "./restdoccer.js",
   "dependencies": {
     "optimist": "~0.6.0",
-    "ejs": "~0.8.4"
+    "ejs": "~0.8.4",
+    "html-minifier": "~0.5.2",
+    "sqwish": "~0.2.1",
+    "uglify-js": "~2.4.0"
   },
   "devDependencies": {},
   "scripts": {
