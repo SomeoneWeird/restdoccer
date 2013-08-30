@@ -121,9 +121,23 @@
 
 		                      	<%= endpoints[i].endpoint %>
 
-		                      	<% if(endpoints[i].tags && endpoints[i].tags.length > 0) { %>
-		                      		<span class="label label-default pull-right"><%= endpoints[i].tags[i] %></span>
-		                      	<% } %>
+		                      	<% 
+
+		                      		if(endpoints[i].tags && endpoints[i].tags.length > 0) { 
+
+		                      			for(var j = 0; j < endpoints[i].tags.length; j++) {
+
+		                      	%>
+
+		                      			<span class="label label-default pull-right"><%= endpoints[i].tags[j] %></span>
+
+		                      	<% 		
+
+		                      			}
+
+		                      		}
+
+		                      	%>
 
 		                      	<% if(endpoints[i].experimental) { %>
 		                      		<span class="label label-warning pull-right">experimental</span>
