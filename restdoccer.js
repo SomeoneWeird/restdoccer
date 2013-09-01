@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 var argv = require('optimist')
-	.usage("Usage: $0 --file [filename]")
-	.demand([ 'file' ])
-	.alias('file', 'f')
-	.describe('file', 'File containing REST documentation JSON')
+	.usage("Usage: $0 --apis [filename] --info [filename]")
+	.demand([ 'apis', 'info' ])
+	.describe('apis', 'File containing API JSON.')
+	.describe('info', 'File containing info JSON.')
 	.alias('output', 'o')
 	.describe('output', 'Output file')
 	.describe('minify', "Minify HTML output")
@@ -20,85 +20,94 @@ var min_html = require('html-minifier');
 var min_css  = require('sqwish');
 var min_js   = require("uglify-js");
 
-var index_template = fs.readFileSync(__dirname + '/template/index.ejs').toString();
+var templates = {
 
-if(!fs.existsSync(argv.file)) {
-
-	console.error(argv.file + " doesn't exist!");
-	process.exit();
-
+	index:    fs.readFileSync(__dirname + '/template/index.ejs').toString(),
+	rest:     fs.readFileSync(__dirname + '/template/rest.ejs').toString()
+	
 }
 
-var doc_json;
+var checkFile = function(file) {
+	if(!fs.existsSync(file)) {
+		console.error(file + " doesn't exist!");
+		process.exit(1);
+	}
+}
+
+checkFile(argv.apis);
+checkFile(argv.info);
+
+if(!argv.output) {
+	var filename = argv.apis.split('.');
+	filename.pop();
+	argv.output = filename.join('.') + '.html';
+}
+
+var info;
+var apis;
 
 try {
 
-	doc_json = JSON.parse(fs.readFileSync(argv.file).toString());	
+	info = JSON.parse(fs.readFileSync(argv.info).toString());
+	apis = JSON.parse(fs.readFileSync(argv.apis).toString());
 
 } catch(e) {
 
-	console.error(argv.file + " is not valid JSON... exiting");
-	process.exit();
+	console.error("One of the specified files is not valid JSON... exiting");
+	console.log(e);	
+	process.exit(1);
 
 }
 
-if(!doc_json.endpoints || doc_json.endpoints.length == 0) {
+if(apis.length == 0) {
 
-	console.error("No specified endpoints, exiting.");
-	process.exit();
+	console.error("No specified APIs, exiting.");
+	process.exit(1);
 
 }
 
 // inline logo image
 
-if(doc_json.logo) {
+if(info.logo) {
 
-	console.log("Converting logo to data uri...");
-
-	var logo = fs.readFileSync(doc_json.logo);
+	var logo = fs.readFileSync(info.logo);
 
     var data_uri_prefix = "data:image/png;base64,";
     var image = data_uri_prefix + new Buffer(logo, 'binary').toString('base64'); 
 
-    doc_json.logo = image;
+    info.logo = image;
 
 }
 
-var groups = {};
+var _apis = [];
 
-for(var i = 0; i < doc_json.endpoints.length; i++) {
+for(var i = 0; i < apis.length; i++) {
 
-	if(doc_json.endpoints[i].group) {
+	var api = apis[i];
 
-		if(!groups[doc_json.endpoints[i].group]) groups[doc_json.endpoints[i].group] = [];
+	api.index = i;
 
-		groups[doc_json.endpoints[i].group].push({
-			endpoint: doc_json.endpoints[i].endpoint,
-			index: i
-		});
+	var type = api.type;
 
-	}
+	var _html = ejs.render(templates[type], {
+		api: api
+	});
 
-	if(!doc_json.endpoints[i].method) {
-
-		doc_json.endpoints[i].method = "UNKNOWN";
-
-	}
+	_apis.push(_html);
 
 }
 
-doc_json.groups = groups;
+var index_html = ejs.render(templates['index'], {
+	info: info,
+	apis: _apis
+});
 
-var index_html = ejs.render(index_template, doc_json);
-
-console.log("Rendered index.html");
-
-// js_files is in reverse order
+console.log("Rendered " + argv.output);
 
 var js_files = [
+	'jquery.js',
 	'meny.min.js',
-	'bootstrap.js',
-	'jquery.js'
+	'bootstrap.js'
 ]
 
 var css_files = [
@@ -119,7 +128,9 @@ css_files.forEach(function(file) {
 	index_html = index_html.replace("<head>", "<head>" + data);
 });
 
-js_files.forEach(function(file) {
+for(var i = js_files.length - 1; i >= 0; i--) { //reverse include js files
+
+	var file = js_files[i];
 	var data = fs.readFileSync(__dirname + '/template/files/' + file).toString();
 	if(argv.minify) {
 		console.log("Minifying " + file);
@@ -128,7 +139,8 @@ js_files.forEach(function(file) {
 	console.log("Merging " + file + "...");
 	data = "<script>" + data + "</script>";
 	index_html = index_html.replace("<head>", "<head>" + data);
-});
+
+}
 
 if(argv.minify) {
 	console.log("Cleaning HTML....");
@@ -139,15 +151,8 @@ if(argv.minify) {
 	 collapseBooleanAttributes: true,
 	 removeAttributeQuotes: true,
 	 removeEmptyAttributes: true
-	}).replace(/\n/g, '').replace(/\s{2,}/g, ' ');
+	});
 }
-
-if(!argv.output) {
-	var filename = argv.file.split('.');
-	filename.pop();
-	argv.output = filename.join('.') + '.html';
-}
-
 
 fs.writeFileSync(argv.output, index_html);
 
