@@ -1,8 +1,8 @@
 {
   "name": "restdoccer",
   "preferGlobal": true,
-  "version": "0.0.7",
-  "description": "Generate self-contained, offline REST API docs from a JSON file.",
+  "version": "0.0.8",
+  "description": "Generate self-contained, offline API docs from a JSON file.",
   "bin": "./restdoccer.js",
   "dependencies": {
     "optimist": "~0.6.0",
@@ -24,7 +24,8 @@
     "api",
     "docs",
     "json",
-    "offline"
+    "offline",
+    "documentation"
   ],
   "author": "SomeoneWeird",
   "license": "MIT",
