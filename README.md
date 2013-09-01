@@ -22,16 +22,13 @@ npm link
 ##### Usage
 
 ```
-Usage: node ./restdoccer.js --file [filename]
+Usage: node ./restdoccer.js --apis [filename] --info [filename]
 
 Options:
-  --file, -f    File containing REST documentation JSON  [required]
-  --output, -o  Output file                            
-  --minify, -m  Minify HTML output                       [default: true]
-```
-
-```
-restdoccer -f <filename>.json
+  --apis        File containing API JSON.   [required]
+  --info        File containing info JSON.  [required]
+  --output, -o  Output file               
+  --minify, -m  Minify HTML output          [default: true]
 ```
 
 ##### Example
