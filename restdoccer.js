@@ -23,7 +23,8 @@ var min_js   = require("uglify-js");
 var templates = {
 
 	index:    fs.readFileSync(__dirname + '/template/index.ejs').toString(),
-	rest:     fs.readFileSync(__dirname + '/template/rest.ejs').toString()
+	rest:     fs.readFileSync(__dirname + '/template/rest.ejs').toString(),
+	function: fs.readFileSync(__dirname + '/template/function.ejs').toString()
 	
 }
 
