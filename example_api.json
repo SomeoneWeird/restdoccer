@@ -1,60 +1,226 @@
 [
+
    {
-      "endpoint":   "/user/:id",
+      "endpoint": "/register",
       "type": "rest",
       "method": "POST",
-      "description": "Get some user object thingy by ID.",
-      "urlParameters": {
-         "id": {
-            "description": "ID of the user.",
-            "type":        "integer"
-         }
-      },
+      "description": "Logs the user in.",
       "postParameters": {
-         "getHidden": {
-            "description": "Return hidden data.",
-            "type":        "boolean",
-            "required":    "false"
-         }
-      },
-      "responses": {
 
-         "success": {
+         "username": {
 
-            "username": "testuser",
-            "email": "testemail@example.com"
+            "description": "Users chosen username.",
+            "type":        "string",
+            "required":    true
 
          },
 
+         "pass": {
+
+            "description": "Users chosen password.",
+            "type":        "string",
+            "required":    true
+
+         }
+
+      },
+
+      "responses": {
+
+         "error_msg": "One of the following keys will exist.",
+
          "error": {
 
-            "error": "Could not find user with that ID."
+            "emailUsed": true,
+            "usernameUsed": true,
+            "invalidEmail": true,
+            "invalidUsername": true
 
+         },
+
+         "success": {
+            "registered": true
          }
 
       }
+
    },
 
    {
-      "endpoint": "/deprecated",
-      "type": "rest",
+      "endpoint": "/login",
       "method": "GET",
-      "deprecated": true,
+      "type": "rest",
+      "description": "Logs the user in.",
       "postParameters": {
-         "SomeWeirdPOSTParam": {
-            "description": "Weird POST param..",
-            "type":        "boolean",
-            "required":    "true"
+
+         "username": {
+
+            "description": "Username....?",
+            "type":        "string",
+            "required":    true
+
+         },
+
+         "password": {
+
+            "description": "Password...........? (come on, do you really need a description?!)",
+            "type":        "string",
+            "required":    true
+
          }
+
+      },
+
+      "responses": {
+
+         "success": {
+            "loggedIn": true
+         },
+         "error": {
+            "loggedIn": false
+         }
+
       }
+
    },
 
    {
-      "endpoint":   "/someExperimentalEndpointThatIsGoingToChange",
+      "endpoint": "/logout",
       "type": "rest",
       "method": "POST",
-      "description": "You shouldn't expect this to be stable...",
-      "experimental": true
+      "description": "TBD - Not implemented.",
+      "development": true
+   },
+
+   {
+      "endpoint": "/resetpassword",
+      "type": "rest",
+      "method": "POST",
+      "description": "Emails the user a password reset with a unique link.",
+      "postParameters": {
+
+         "email": {
+
+            "description": "The users email address.",
+            "type": "string",
+            "required": true
+
+         }
+
+      },
+
+      "responses": {
+
+         "error_msg": "'err' will have the value of one of the items in the following array.",
+
+         "error": {
+            "err": [ "invalid", "blocked", "notfound", "error" ]
+         },
+
+         "success": {
+            "status": "sent"
+         }
+
+      }
+
+   },
+
+   {
+      "endpoint": "/changepassword",
+      "type": "rest",
+      "method": "POST",
+      "description": "Changes the users password.",
+      "postParameters": {
+
+         "token": {
+
+            "description": "The users unique token.",
+            "type": "string",
+            "required": true
+
+         },
+
+         "pass": {
+
+            "description": "The users new password.",
+            "type": "string",
+            "required": true
+
+         }
+
+      },
+
+      "responses": {
+
+         "error_msg": "'status' will have the value of one of the items in the following array.",
+
+         "error": {
+            "status": [ "invalid", "error" ]
+         },
+
+         "success": {
+            "status": "success"
+         }
+
+      }
+
+   },
+
+   {
+
+      "endpoint": "/thismaychange",
+      "type": "rest",
+      "method": "PUT",
+      "experimental": true,
+      "description": "Function i'm working on that will change (for better or for worse)",
+
+      "postParameters": {
+
+         "idek": {
+            "description": "This is just an example file stop expecting me to write real descriptions",
+            "type": "idk either, it can be a string.",
+            "required": true
+         }
+
+      }
+
+
+   },
+
+   {
+
+      "name": "exampleFunction",
+      "type": "function",
+      "returns": "object",
+      "description": "some description okay",
+      "arguments": [
+
+         {
+
+            "name": "requiredArg",
+            "required": true,
+            "description": "This argument is required (if you couldn't tell)"
+
+         },
+
+         {
+
+            "name": "optionalArg",
+            "type": "object",
+            "required": false,
+            "description": "Really...?"
+
+         }
+
+      ],
+
+      "example": {
+
+         "call": "exampleFunction('itsastringokay', { 'itsa': 'optional!' });",
+         "response": { "optional": "you say?" }
+
+      }
+
    }
 
 ]

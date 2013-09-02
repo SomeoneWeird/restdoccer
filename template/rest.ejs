@@ -25,29 +25,8 @@
 				
   	<div class="accordion-heading">
         <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse-<%=api.index%>">
-          	<% 
 
-      			var method = api.method; 
-
-				var badge = 'label-default';
-
-      			if(method == "GET") {
-
-      				badge = 'label-success';
-
-      			} else if(method == "POST") {
-
-      				badge = 'label-info';
-
-      			} else if(method == "DELETE") {
-
-      				badge = 'label-danger';
-
-      			}
-
-          	%>
-
-          	<span class="label <%= badge %>"><%= method %></span>
+          	<span class="label label-info"><%= api.method || "GET" %></span>
 
           	<%= api.endpoint %>
 
