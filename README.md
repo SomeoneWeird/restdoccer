@@ -13,7 +13,7 @@ npm install custom-restdoccer
 git:
 
 ```
-git clone https://github.com/SomeoneWeird/restdoccer.git
+git clone https://github.com/Immuzov/restdoccer.git
 cd restdoccer
 npm install
 npm link
