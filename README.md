@@ -31,14 +31,8 @@ Options:
   --minify, -m  Minify HTML output          [default: true]
 ```
 
-##### Example
-
-See [http://someoneweird.github.io/restdoccer/](http://someoneweird.github.io/restdoccer/) for example output (may be uh, _very_ outdated...)
-
-See [example.json](https://github.com/SomeoneWeird/restdoccer/blob/master/example.json) for an example configuration.
 
 ##### License
-
 
 > The MIT License (MIT)
 
