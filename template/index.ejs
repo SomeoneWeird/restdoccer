@@ -1,63 +1,31 @@
+<!doctype html>
 <html>
+<head>
+  <title> <%= info.name %> </title>
+</head>
+<body>
+<div class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a href="<%= info.apiUrl %>" class="navbar-brand"><%= info.name %></a>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="accordion" id="apis">
+    <% for(var i = 0; i < apis.length; i++) { %>
+    <%- apis[i] %>
+    <% } %>
+  </div>
+</div>
 
-	<head>
+<footer>
+  <div class="container">
+    <% if(info.footer) { %>
+    <div class="copyright"><%= info.footer %></div>
+    <% } %>
+  </div>
+</footer>
 
-		<title> <%= info.name %> </title>
-
-	</head>
-
-	<body>
-
-		<div class="meny">
-
-		</div>
-
-		<div class="contents">
-
-			<div id="header">
-
-				<% if(info.url) { %>
-
-					<span class="logo"><a href="<%= info.url %>"><img src="<%= info.logo %>"></img></a></span>
-
-				<% } %>
-
-				<h1><%= info.name %></h1>
-
-			</div>
-
-			<div class="accordion" id="apis">
-
-				<% for(var i = 0; i < apis.length; i++) { %>
-
-					<%- apis[i] %>
-
-	        	<% } %>
-
-	        </div>
-
-	        <% if(info.copyright) { %>
-		        <div class="copyright"><%= info.copyright %> &copy;</div>
-	        <% } %>
-
-	    </div>
-
-	    <script>
-
-	    	var meny = Meny.create({
-			    menuElement: document.querySelector( '.meny' ),
-			    contentsElement: document.querySelector( '.contents' ),
-			});
-
-			var scrollClick = function(index) {
-
-				meny.close();
-				$('.contents').animate({ scrollTop: $('#collapse-' + index).offset().top }, 300);			
-
-			}
-
-		</script>
-
-	</body>
-
+</body>
 </html>

@@ -1,6 +1,5 @@
 {
-
-	"name": "RestDoccer Example",
-   	"copyright": "RestDoccer Example Copyright"
-
+  "name":   "Snimzy RestDoccer v0.0.1",
+  "apiUrl": "/apidocs",
+  "footer": "Snimzy RestDoccer v0.0.1, Aleksey Lutsenko <immuzov@gmail.com>"
 }
