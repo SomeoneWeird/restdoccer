@@ -1,175 +1,124 @@
 <%
-	
-	var replacer = function(match, pIndent, pKey, pVal, pEnd) {
-      var key = '<span class=json-key>';
-      var val = '<span class=json-value>';
-      var str = '<span class=json-string>';
-      var r = pIndent || '';
-      if (pKey)
-         r = r + key + pKey.replace(/[": ]/g, '') + '</span>: ';
-      if (pVal)
-         r = r + (pVal[0] == '"' ? str : val) + pVal + '</span>';
-      return r + (pEnd || '');
-    }
-    var prettyPrint = function(obj) {
-      var jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg;
-      return JSON.stringify(obj, null, 3)
-         .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
-         .replace(/</g, '&lt;').replace(/>/g, '&gt;')
-         .replace(jsonLine, replacer);
-    }
-
+var replacer = function(match, pIndent, pKey, pVal, pEnd){
+  var key = '<span class=json-key>';
+  var val = '<span class=json-value>';
+  var str = '<span class=json-string>';
+  var r = pIndent || '';
+  if (pKey)
+    r = r + key + pKey.replace(/[": ]/g, '') + '</span>: ';
+  if (pVal)
+    r = r + (pVal[0] == '"' ? str : val) + pVal + '</span>';
+  return r + (pEnd || '');
+}
+var prettyPrint = function(obj){
+  var jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg;
+  return JSON.stringify(obj, null, 3)
+    .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(jsonLine, replacer);
+}
 %>
-
-<% var str = []; if(api.arguments && api.arguments.length > 0) { api.arguments.forEach(function(arg) {if(!arg.required){ str.push("[, " + arg.name + "]");}else{str.push(str.length > 0 ? ", " + arg.name : arg.name);}}) %><% } %>
-
+<% var str = []; if(api.arguments && api.arguments.length > 0) { api.arguments.forEach(function(arg){
+  if (!arg.required) {
+    str.push("[, " + arg.name + "]");
+  } else {str.push(str.length > 0 ? ", " + arg.name : arg.name);}
+}) %> <% } %>
 <div class="accordion-group">
-				
-  	<div class="accordion-heading">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse-<%=api.index%>">
-
-          	<span class="label label-success">function</span>
-
-          	<%= api.name %> ( <%= str.join(" ") %> )
-
-          	<% if(api.experimental) { %>
-          		<span class="label label-warning pull-right"> experimental </span>
-          	<% } %>
-
-          	<% if(api.development) { %>
-          		<span class="label label-important pull-right"> development </span>
-          	<% } %>
-
-        </a>
-  	</div>
-
-  	<div id="collapse-<%=api.index%>" class="accordion-body collapse">
-    	<div class="accordion-inner">
-
-    		<div class="page-header">
-			  <h1><%= api.name %><small>( <%= str.join(" ") %> )</small><br>
-			  <small><%= api.description || '' %></small></h1>
-			</div>		
-
-			<% if(api.deprecated) { %>
-
-				<div class="alert">
-				  <button type="button" class="close" data-dismiss="alert">&times;</button>
-				  <strong>Warning!</strong> This API has been deprecated.
-				</div>
-
-			<% } %>
-
-			<% if(api.experimental) { %>
-
-				<div class="alert alert-info">
-					This API is experimental.
-				</div>
-
-			<% } %>
-
-			<% if(api.development) { %>
-
-				<div class="alert alert-warning">
-					This API is under development.
-				</div>
-
-			<% } %>
-
-        	<% if(api.arguments && api.arguments.length > 0) { %>
-
-
-        		<div class="accordion" id="accordion-params">
-
-    				<div class="accordion-group">
-				
-	                  	<div class="accordion-heading">
-		                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-params" href="#collapse-<%=api.index%>-postparams">Arguments</a>
-              			</div>
-
-              			<div id="collapse-<%=api.index%>-postparams" class="accordion-body collapse ">
-
-	                    	<div class="accordion-inner">
-
-								<table class="table table-striped">
-									<thead>
-										<tr>
-										<th>Name</th>
-										<th>Type</th>
-										<th>Required</th>
-										<th>Description</th>
-										</tr>
-									</thead>
-									<tbody>
-
-										<% for(var i = 0; i < api.arguments.length; i++) { 
-
-												var keyData = api.arguments[i];
-
-										%>
-
-											<tr>
-												<td><%=keyData.name%></td>
-												<td><%=keyData.type || "Unspecified" %></td>
-												<td><%=keyData.required || false %></td>
-												<td><%=keyData.description || "" %></td>
-											</tr>
-
-										<% } %>
-
-									</tbody>
-								</table>
-
-							</div>
-
-						</div>
-
-					</div>
-        		</div>
-
-            <% } else { %>
-
-    					<div class="accordion-group">
-					
-		                  	<div class="accordion-heading">
-			                    <span class="accordion-toggle">
-			                    	No required arguments.
-			                    </span>
-                  			</div>
-
-                  		</div>
-
-                  	<% } %>
-
-
-        	<br>
-
-        	<% if(api.example && api.example.call) { %>
-
-            	<div style="width: 50%; float: left;">
-
-        			<h5><span class="label">Example Call</span></h5>
-
-        			<pre><%- prettyPrint(api.example.call) %></pre>
-
-        		</div>
-
-        	<% } %>
-
-        	<% if(api.example && api.example.response) { %>
-
-            	<div style="width: 50%; float: left;">
-
-        			<h5><span class="label">Example Response</span></h5>
-
-        			<pre><%- prettyPrint(api.example.response) %></pre>
-
-        		</div>
-
-        	<% } %>
-
-		</div>
-
-  	</div>
-
+  <div class="accordion-heading well">
+    <span class="label label-success">function</span>
+    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse-<%= api.index %>">
+      <%= api.name %> ( <%= str.join(" ") %> )
+      <% if(api.experimental) { %>
+      <span class="label label-warning pull-right"> experimental </span>
+      <% } %>
+      <% if(api.development) { %>
+      <span class="label label-danger pull-right"> development </span>
+      <% } %>
+    </a>
+  </div>
+  <div id="collapse-<%= api.index %>" class="accordion-body collapse">
+    <div class="accordion-inner">
+      <div class="accordion-header">
+        <h1><%= api.name %>
+          <small>( <%= str.join(" ") %> )</small>
+          <br>
+          <small><%= api.description || '' %></small>
+        </h1>
+      </div>
+      <% if(api.deprecated) { %>
+      <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>Warning!</strong> This API has been deprecated.
+      </div>
+      <% } %>
+      <% if(api.experimental) { %>
+      <div class="alert alert-info">
+        This API is experimental.
+      </div>
+      <% } %>
+      <% if(api.development) { %>
+      <div class="alert alert-info">
+        This API is under development.
+      </div>
+      <% } %>
+      <% if(api.arguments && api.arguments.length > 0) { %>
+      <div class="accordion" id="accordion-params">
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-params"
+               href="#collapse-<%= api.index %>-postparams">Arguments</a>
+          </div>
+          <div id="collapse-<%= api.index %>-postparams" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <% for(var i = 0; i < api.arguments.length; i++) {
+                var keyData = api.arguments[i];
+              %>
+              <% } %>
+              <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Required</th>
+                  <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><%= keyData.name %></td>
+                  <td><%= keyData.type || "Unspecified" %></td>
+                  <td><%= keyData.required || false %></td>
+                  <td><%= keyData.description || "" %></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% } else { %>
+      <div class="accordion-group">
+        <div class="accordion-heading">
+            <span class="accordion-toggle">
+              No required arguments.
+            </span>
+        </div>
+      </div>
+      <% } %>
+      <div class="row-rr">
+        <% if(api.example && api.example.call) { %>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          <h4><span class="label label-primary">Example Call</span></h4>
+          <pre class="well"><%- prettyPrint(api.example.call) %></pre>
+        </div>
+        <% } %>
+        <% if(api.example && api.example.response) { %>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          <h4><span class="label label-success">Example Response</span></h4>
+          <pre class="well"><%- prettyPrint(api.example.response) %></pre>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
 </div>
