@@ -1,5 +1,5 @@
 {
-  "name":            "restdoccer",
+  "name":            "custom-restdoccer",
   "preferGlobal":    true,
   "version":         "0.0.8",
   "description":     "Generate self-contained, offline API docs from a JSON file.",

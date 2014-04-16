@@ -7,7 +7,7 @@ Restdoccer is an API documentation tool.
 npm:
 
 ```
-npm install restdoccer -g
+npm install custom-restdoccer
 ```
 
 git:
