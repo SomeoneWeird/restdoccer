@@ -1,25 +1,27 @@
 {
-  "name":            "custom-restdoccer",
-  "preferGlobal":    true,
-  "version":         "0.0.9",
-  "description":     "Generate self-contained, offline API docs from a JSON file.",
-  "bin":             "./restdoccer.js",
-  "dependencies":    {
-    "optimist":      "~0.6.0",
-    "ejs":           "~0.8.4",
+  "name": "restdoccer",
+  "preferGlobal": true,
+  "version": "0.0.8",
+  "description": "Generate self-contained, offline API docs from a JSON file.",
+  "bin": "./restdoccer.js",
+  "dependencies": {
+    "optimist": "~0.6.0",
+    "ejs": "~0.8.4",
     "html-minifier": "~0.5.2",
-    "sqwish":        "~0.2.1",
-    "uglify-js":     "~2.4.0"
+    "sqwish": "~0.2.1",
+    "uglify-js": "~2.4.0"
   },
-  "devDependencies": {},
-  "scripts":         {
+  "devDependencies": {
+
+  },
+  "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository":      {
+  "repository": {
     "type": "git",
-    "url":  "https://github.com/Immuzov/restdoccer.git"
+    "url": "https://github.com/SomeoneWeird/restdoccer.git"
   },
-  "keywords":        [
+  "keywords": [
     "rest",
     "api",
     "docs",
@@ -27,7 +29,8 @@
     "offline",
     "documentation"
   ],
-  "author":          "SomeoneWeird",
-  "license":         "MIT",
-  "readmeFilename":  "README.md"
+  "author": "SomeoneWeird",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "gitHead": "9f3794192814efba2039354304a4aeecf88284fa"
 }

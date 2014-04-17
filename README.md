@@ -7,13 +7,13 @@ Restdoccer is an API documentation tool.
 npm:
 
 ```
-npm install custom-restdoccer
+npm install restdoccer -g
 ```
 
 git:
 
 ```
-git clone https://github.com/Immuzov/restdoccer.git
+git clone https://github.com/SomeoneWeird/restdoccer.git
 cd restdoccer
 npm install
 npm link
@@ -31,8 +31,14 @@ Options:
   --minify, -m  Minify HTML output          [default: true]
 ```
 
+##### Example
+
+See [http://someoneweird.github.io/restdoccer/](http://someoneweird.github.io/restdoccer/) for example output (may be uh, _very_ outdated...)
+
+See [example.json](https://github.com/SomeoneWeird/restdoccer/blob/master/example.json) for an example configuration.
 
 ##### License
+
 
 > The MIT License (MIT)
 
