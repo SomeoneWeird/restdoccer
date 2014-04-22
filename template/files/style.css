@@ -90,6 +90,10 @@ span.accordion-toggle:hover {
   color : #cc7832;
 }
 
+.navbar-brand, .navbar-brand:hover {
+  color : #ffffff !important;
+}
+
 footer {
   margin-bottom : 25px;
 }
