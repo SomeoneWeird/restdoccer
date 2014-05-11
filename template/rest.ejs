@@ -20,7 +20,19 @@ var prettyPrint = function(obj) {
 %>
 <div class="accordion-group">
   <div class="accordion-heading well">
-    <span class="label label-info"><%= api.method || "GET" %></span>
+    <% if (api.method == "POST") {
+      label = "label-warning"
+    } else if (api.method == "PUT") {
+      label = "label-info"
+    }
+    else if (api.method == "DELETE") {
+      label = "label-danger"
+    }
+    else {
+      label = "label-success"
+    }
+    %>
+    <span class="label <%=label%>"><%= api.method || "GET" %></span>
     <a class="accordion-toggle accordion-endpoint" data-toggle="collapse" data-parent="#accordion"
        href="#collapse-<%= api.index %>">
       <%= api.endpoint %>
