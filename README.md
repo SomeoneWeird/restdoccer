@@ -37,6 +37,10 @@ See [http://someoneweird.github.io/restdoccer/](http://someoneweird.github.io/re
 
 See [example.json](https://github.com/SomeoneWeird/restdoccer/blob/master/example.json) for an example configuration.
 
+##### Contributors 
+
+* [Immuzov](https://github.com/Immuzov)
+
 ##### License
 
 
