@@ -1,3 +1,5 @@
+## This project is not really maintained anymore, nevertheless, it should still work.
+
 ##restdoccer
 
 Restdoccer is an API documentation tool.
